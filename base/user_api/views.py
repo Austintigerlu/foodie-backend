@@ -1,4 +1,4 @@
-from django.http import JsonResponse
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -25,14 +25,19 @@ class MyTokenObtainPairView(TokenObtainPairView):
 @api_view(['POST'])
 def registerUser(request):
     data = request.data
-    user = User.objects.create(
-        first_name=data['first_name'],
-        last_name=data['last_name'],
-        username=data['username'],
-        email=data['email'],
-        password=make_password(data['password'])
-    )
-    return Response('Data')
+    try:
+        user = User.objects.create(
+            first_name=data['first_name'],
+            last_name=data['last_name'],
+            username=data['username'],
+            email=data['email'],
+            password=make_password(data['password'])
+        )
+        serializer = UserSerializer(user, many=False)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    except:
+        message = {'detail': 'User already exists'}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 def getUserProfile(request):
