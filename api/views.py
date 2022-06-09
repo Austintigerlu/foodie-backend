@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from .models import Restaurant
-from .serializers import RestaurantSerializer
+from .serializers import RestaurantSerializer, ReviewSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status, filters
