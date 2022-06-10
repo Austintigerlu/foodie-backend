@@ -8,10 +8,8 @@ class Restaurant(models.Model):
     price = models.CharField(max_length=100)
     image = models.CharField(max_length=100)
     category = models.CharField(max_length=100)
-    latitude = models.FloatField(default=0)
-    longitude = models.FloatField(default=0)
+    description = models.TextField(null=True, blank=True)
     rating = models.FloatField(default=0)
-    yelp_id = models.CharField(max_length=100, null=True)
     
     def __str__(self):
         return self.name

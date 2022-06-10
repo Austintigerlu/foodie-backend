@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from .models import Restaurant
+from .models import Restaurant, Review
 from .serializers import RestaurantSerializer, ReviewSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -22,8 +22,7 @@ def restaurant_list(request):
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def restaurant_detail(request, id):
-    filter_backends=[DjangoFilterBackend, filters.SearchFilter]
-    search_fields = ['name', 'neighborhood']
+    
     try:
         restaurant = Restaurant.objects.get(pk=id)
     except Restaurant.DoesNotExist:
@@ -40,3 +39,4 @@ def restaurant_detail(request, id):
     elif request.method == 'DELETE':
         restaurant.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
