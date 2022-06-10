@@ -1,23 +1,24 @@
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
-from .serializers import UserSerializer
+from .serializers import UserSerializer, UserSerializerWithToken
 from base.user_api import serializers
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-    @classmethod
-    def get_token(cls, user):
-        token = super().get_token(user)
+    def validate(self, attrs):
+        data= super().validate(attrs)
 
-        token['username'] = user.username
-        token['email'] = user.email
-        
+        serializer = UserSerializerWithToken(self.user).data
 
-        return token
+        for k, v in serializer.items():
+            data[k] = v
+
+        return data
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
@@ -40,6 +41,7 @@ def registerUser(request):
         return Response(message, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def getUserProfile(request):
     user = request.user
     serializer = UserSerializer(user, many=False)
