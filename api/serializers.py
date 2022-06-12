@@ -9,6 +9,8 @@ class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
         fields = '__all__'
+    
+
 
 class RestaurantSerializer(serializers.ModelSerializer):
     reviews = serializers.SerializerMethodField(read_only=True)

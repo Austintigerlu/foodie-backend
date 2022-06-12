@@ -6,6 +6,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('restaurants/', views.restaurant_list),
     path('restaurants/<str:pk>/reviews', views.createRestaurantReview),
+    path('restaurants/<str:pk>/admin', views.restaurant_admin),
     path('restaurants/<str:pk>', views.restaurant_detail),
     path('api/', include('base.user_api.urls'))
 ]
