@@ -17,7 +17,7 @@ def restaurant_list(request):
         print(location)
     restaurants = Restaurant.objects.filter(name__icontains=search, neighborhood__icontains=location)
     page = request.query_params.get('page')
-    paginator = Paginator(restaurants, 3)
+    paginator = Paginator(restaurants, 5)
 
     try:
         restaurants = paginator.page(page)
